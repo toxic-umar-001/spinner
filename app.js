@@ -1,3 +1,4 @@
+import './style.css';
 /* ================================================================
    Decision Spinner Wheel — app.js
    Vanilla JS · zero dependencies · 60fps canvas
