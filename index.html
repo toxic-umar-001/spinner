@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Interactive Choice & Decision Spinner Wheel — add options, spin, and let fate decide." />
+    <title>Decision Spinner Wheel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <meta property="og:image" content="https://bolt.new/static/og_default.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://bolt.new/static/og_default.png">
+</head>
+  <body>
+    <div id="app">
+
+      <!-- ===== Header ===== -->
+      <header class="app-header">
+        <div class="header-brand">
+          <div class="brand-icon-wrap">
+            <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M12 2v10l7 4" />
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h1>Spinner<span>Wheel</span></h1>
+            <p class="brand-tag">Decision Maker Tool</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button id="copy-embed-btn" class="header-btn" title="Copy iframe embed code for WordPress">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Embed Code</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- ===== Main Dashboard ===== -->
+      <main class="dashboard">
+
+        <!-- Wheel column -->
+        <section class="wheel-column">
+          <div class="wheel-stage" id="wheel-stage">
+            <div class="wheel-frame">
+              <canvas id="wheel-canvas" aria-label="Spinner wheel"></canvas>
+              <div class="pointer" aria-hidden="true">
+                <div class="pointer-shape"></div>
+              </div>
+              <button id="spin-btn" class="spin-btn" aria-label="Spin the wheel">
+                <span class="spin-btn-ring"></span>
+                <span class="spin-btn-text">SPIN</span>
+              </button>
+            </div>
+          </div>
+          <div class="wheel-hint">
+            <kbd>Space</kbd> or tap the wheel to spin
+          </div>
+        </section>
+
+        <!-- Control panel column -->
+        <aside class="panel-column">
+
+          <!-- Options card -->
+          <div class="glass-card">
+            <div class="card-header">
+              <h2>Options</h2>
+              <span id="option-count" class="badge">0</span>
+            </div>
+
+            <div class="add-row">
+              <input type="text" id="option-input" placeholder="Type an option and press Enter…" maxlength="40" aria-label="New option text" />
+              <label class="color-pick" title="Pick a color">
+                <input type="color" id="color-input" value="#6366f1" aria-label="Color for new option" />
+                <span class="color-pick-swatch"></span>
+              </label>
+              <button id="add-btn" class="add-btn" title="Add option" aria-label="Add option">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+
+            <div class="presets">
+              <button class="preset-chip" data-preset="yes-no">Yes / No</button>
+              <button class="preset-chip" data-preset="food">Food</button>
+              <button class="preset-chip" data-preset="numbers">1–10</button>
+              <button class="preset-chip" data-preset="clear">Clear</button>
+            </div>
+
+            <ul id="option-list" class="option-list" role="list"></ul>
+
+            <div class="card-footer">
+              <button id="reset-btn" class="text-btn">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <!-- Settings card -->
+          <div class="glass-card">
+            <div class="card-header">
+              <h2>Settings</h2>
+            </div>
+
+            <div class="settings-list">
+              <!-- Sound toggle -->
+              <div class="setting-row">
+                <div class="setting-label">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>
+                  <span>Sound FX</span>
+                </div>
+                <button id="sound-toggle" class="toggle-switch active" role="switch" aria-checked="true" aria-label="Toggle sound effects">
+                  <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </button>
+              </div>
+
+              <!-- Vibration toggle -->
+              <div class="setting-row">
+                <div class="setting-label">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4"/><path d="M18 12h4"/><path d="M8 12h8"/><rect x="8" y="8" width="8" height="8" rx="1"/></svg>
+                  <span>Vibration</span>
+                </div>
+                <button id="vibration-toggle" class="toggle-switch active" role="switch" aria-checked="true" aria-label="Toggle vibration">
+                  <span class="toggle-track"><span class="toggle-thumb"></span></span>
+                </button>
+              </div>
+
+              <!-- Theme selector -->
+              <div class="setting-row setting-row--column">
+                <div class="setting-label">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                  <span>Theme</span>
+                </div>
+                <div class="theme-pills" role="group" aria-label="Theme selector">
+                  <button class="theme-pill active" data-theme="dark">Dark</button>
+                  <button class="theme-pill" data-theme="neon">Neon</button>
+                  <button class="theme-pill" data-theme="light">Light</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </aside>
+      </main>
+
+      <!-- ===== Victory Modal ===== -->
+      <div id="victory-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+        <div class="modal-card">
+          <div class="trophy-glow"></div>
+          <div class="trophy-icon">
+            <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+          </div>
+          <p class="modal-label">The winner is</p>
+          <h2 id="winner-text" class="winner-text">—</h2>
+          <div class="modal-actions">
+            <button id="spin-again-btn" class="btn-primary">Spin Again</button>
+            <button id="remove-winner-btn" class="btn-secondary">Remove Winner</button>
+            <button id="close-modal-btn" class="btn-ghost">Close</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== Toast ===== -->
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+      <!-- ===== Embed Code Modal ===== -->
+      <div id="embed-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-card modal-card--wide">
+          <div class="card-header">
+            <h2>Embed Code</h2>
+            <button id="close-embed-btn" class="modal-close" aria-label="Close">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <p class="embed-desc">Paste this iframe snippet into your WordPress post, page, or HTML widget to embed the spinner wheel.</p>
+          <pre id="embed-code" class="code-block"></pre>
+          <div class="modal-actions">
+            <button id="copy-embed-confirm" class="btn-primary">Copy to Clipboard</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <script type="module" src="/app.js"></script>
+  </body>
+</html>
